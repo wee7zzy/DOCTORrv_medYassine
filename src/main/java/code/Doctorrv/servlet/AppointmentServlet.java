@@ -17,7 +17,8 @@ import code.Doctorrv.DAO.DBcnx;
 public class AppointmentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer patientId = (Integer) session.getAttribute("patient_id"); // Récupérer l'ID depuis la session
+        Integer patientId = (Integer) session.getAttribute("patient_id");// Récupérer l'ID depuis la session
+        String patientNom = (String) session.getAttribute("name");// Récupérer le nom depuis la session
 
         if (patientId == null) {
             response.sendRedirect("bookAppointment.jsp?error=1"); // Redirection si l'ID du patient est absent
@@ -28,15 +29,16 @@ public class AppointmentServlet extends HttpServlet {
         String appointment_date = request.getParameter("appointment_date");
         String motif = request.getParameter("motif");
 
-        String INSERT_APP_SQL = "INSERT INTO appointments (patient_id, doctor_id, appointment_date, motif) VALUES (?, ?, ?, ?)";
+        String INSERT_APP_SQL = "INSERT INTO appointments (patient_id,patient_nom, doctor_id, appointment_date, motif) VALUES (?,?, ?, ?, ?)";
 
         try (Connection conn = DBcnx.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_APP_SQL)) {
 
             stmt.setInt(1, patientId);
-            stmt.setString(2, doctor_id);
-            stmt.setString(3, appointment_date);
-            stmt.setString(4, motif);
+            stmt.setString(2, patientNom);
+            stmt.setString(3, doctor_id);
+            stmt.setString(4, appointment_date);
+            stmt.setString(5, motif);
 
             int result = stmt.executeUpdate();
             if (result > 0) {

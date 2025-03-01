@@ -39,11 +39,13 @@ public class RegisterPatientServlet extends HttpServlet {
                 // Récupérer l'ID généré
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    int patientId = generatedKeys.getInt(2);
+                    int patientId = generatedKeys.getInt(1);
+                    String patientNom = request.getParameter("name");
 
                     // Stocker l'ID dans la session pour le récupérer plus tard
                     HttpSession session = request.getSession();
                     session.setAttribute("patient_id", patientId);
+                    session.setAttribute("name",patientNom);
                 }
 
                 response.sendRedirect("bookAppointment.jsp?success=1");
