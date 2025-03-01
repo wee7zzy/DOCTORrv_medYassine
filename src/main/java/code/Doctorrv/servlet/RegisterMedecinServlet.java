@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import code.Doctorrv.DAO.DBcnx;
 
@@ -25,7 +28,7 @@ public class RegisterMedecinServlet extends HttpServlet {
         String INSERT_DOC_SQL = "INSERT INTO medecins (name,specialite, email, phone, password) VALUES (?,?, ?, ?, ?)";
 
         try (Connection conn = DBcnx.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(INSERT_DOC_SQL)) {
+             PreparedStatement stmt = conn.prepareStatement(INSERT_DOC_SQL )) {
 
             stmt.setString(1, name);
             stmt.setString(2, specialite);
@@ -35,6 +38,8 @@ public class RegisterMedecinServlet extends HttpServlet {
 
             int result = stmt.executeUpdate();
             if (result > 0) {
+
+
                 response.sendRedirect("dashbordDOC.jsp?success=1");
             } else {
                 response.sendRedirect("RegistreDoc.jsp?error=1");
